@@ -98,6 +98,8 @@ vldout = {
     ]
 }
 for i in dirlist:
+    if i[-4:] == '.git':
+        continue
     for subdir, dirs, files in os.walk(i):
         for file in files:
             if file[-4:] == 'json':
@@ -131,7 +133,7 @@ for i in dirlist:
             shutil.copy(j, os.path.join(tspth, str(tsglcount) + '.png'))
             for k in data['annotations']:
                 if k['image_id'] == i:
-                    ann = k
+                    ann = k.copy()
                     ann['id'] = tsglcount2
                     tsglcount2 += 1
                     ann['image_id'] = tsglcount
@@ -145,15 +147,19 @@ for i in dirlist:
                 "height": 640,
                 "file_name": str(trglcount) + '.png'
             }
+            
             shutil.copy(j, os.path.join(trpth, str(trglcount) + '.png'))
             for k in data['annotations']:
                 if k['image_id'] == i:
-                    ann = k
+                    ann = k.copy()
                     ann['id'] = trglcount2
                     trglcount2 += 1
                     ann['image_id'] = trglcount
                     trout['annotations'].append(ann.copy())
             trout['images'].append(img)
+            # if(trglcount == 662):
+            #     print(j)
+            #     sys.exit()
             trglcount += 1
         elif ch == 'vld':
             img = {
@@ -165,7 +171,7 @@ for i in dirlist:
             shutil.copy(j, os.path.join(vldpth, str(vldglcount) + '.png'))
             for k in data['annotations']:
                 if k['image_id'] == i:
-                    ann = k
+                    ann = k.copy()
                     ann['id'] = vldglcount2
                     vldglcount2 += 1
                     ann['image_id'] = vldglcount
