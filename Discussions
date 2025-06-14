@@ -1,0 +1,17 @@
+Dated - 12 Jun'25{
+1.Augumentation on training set /  use synthetic data generations using ML.
+2.Model generalisability - Parameters are Region and Population Density.
+3.Mentioned about BSES. 
+4.Work upon segmentation principles and then Detection .--> yield out better accuracy and per capita Income generation.
+5.Work on the two parameters -- "Direction" and "Tilt" of Solar panels also study how much they effect .
+6.Look into the refernces that are set by Google API's .
+7.We should change the model of Solar Detector and try for any better one.
+8.ISRO- Need to search ISRO's website and see if there is any provision being made to available the data for research faciltiy.
+9.ANKIT SIR -  Will update regarding power generation for IIT Delhi.
+10.For Power Genr=eration , we need to look upon certain parameters like Dust, Location ,Time, Weather .
+11. Determine How is the efficiency being calculated(only area wise or some other parameter also?) , how is the tilt determined , etc.
+12.Timeline of the solarpanel, how old is it.
+13.See the governmnet projects like PM Suryaghar Bijli Yojna ...is it really successful? or it fails when power supply is cut ?
+14.HPC account sign in.
+}
+
