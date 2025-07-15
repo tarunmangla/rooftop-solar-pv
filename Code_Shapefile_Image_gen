@@ -1,0 +1,48 @@
+import geopandas as gpd
+from shapely.geometry import Point
+import numpy as np
+import requests
+import os
+
+API_KEY = "##used api key"  
+ZOOM = 19
+SIZE = "640x640"
+MAPTYPE = "satellite"
+STEP = 0.0008  # appx 90 m 
+
+gdf = gpd.read_file("##file path")
+polygon = gdf.unary_union  # combines everything into one Polygon
+
+minx, miny, maxx, maxy = polygon.bounds
+
+x_vals = np.arange(minx, maxx, STEP)
+y_vals = np.arange(miny, maxy, STEP)
+
+points_inside = []
+for lat in y_vals:
+    for lon in x_vals:
+        pt = Point(lon, lat)
+        if polygon.contains(pt):
+            points_inside.append((lat, lon)) 
+
+print(f" {len(points_inside)} points found inside polygon.")
+
+# output
+output_folder = "#folder name"
+os.makedirs(output_folder, exist_ok=True)
+
+for i, (lat, lon) in enumerate(points_inside):
+    center = f"{lat},{lon}"
+    url = (
+        f"https://maps.googleapis.com/maps/api/staticmap?"
+        f"center={center}&zoom={ZOOM}&size={SIZE}&maptype={MAPTYPE}&key={API_KEY}"
+    )
+    response = requests.get(url)
+    if response.status_code == 200:
+        with open(f"{output_folder}/tile_{i}.png", "wb") as f:
+            f.write(response.content)
+        print(f"🛰️ Downloaded tile {i} at ({lat:.5f}, {lon:.5f})")
+    else:
+        print(f" Failed to download tile {i} at ({lat:.5f}, {lon:.5f})")
+
+print(f" All {len(points_inside)} satellite tiles downloaded to '{output_folder}/'")
