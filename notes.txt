@@ -1,0 +1,2 @@
+Maps to create .kml file: https://www.google.com/maps/d/u/0/ -> Create a new map -> download .kml file
+then go to http://makesense.ai for annotating the images that will create the dataset.
