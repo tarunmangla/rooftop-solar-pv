@@ -22,7 +22,7 @@ SIZE = "640x640"
 MAPTYPE = "satellite"
 STEP = 0.001  # appx 100 m 
 
-gdf = gpd.read_file("/home/ankit/BTP/data/Gurugram_Sec23.kml")
+gdf = gpd.read_file("/home/ankit/BTP/data/Gurugram_new.kml")
 gdf = gdf.to_crs(epsg=4326)
 
 
@@ -49,10 +49,10 @@ for lat in y_vals:
 print(f" {len(points_inside)} points found inside polygon.")
 
 # output
-output_folder = "/home/ankit/BTP/data/Gurugram_Sec23_tiles"
+output_folder = "/home/ankit/BTP/data/Gurugram_new_tiles"
 os.makedirs(output_folder, exist_ok=True)
 
-max_tiles = 100
+max_tiles = 900
 
 for i, (lat, lon) in enumerate(points_inside):
     if i >= max_tiles:

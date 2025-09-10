@@ -95,3 +95,10 @@ secrets.*
 data/IITD_satellite_tiles/
 data/Gurugram_tiles/
 data/udaigiri_satellite_tiles/
+
+# Images
+*.png
+
+
+random/
+*.zip
