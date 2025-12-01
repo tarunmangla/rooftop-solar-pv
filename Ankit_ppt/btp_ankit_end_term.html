@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>B.Tech Project Presentation: Merged Final</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script charset="utf-8" src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .slide {
+      width: 100%;
+      height: 100%;
+      padding: 2rem 4rem;
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      border: 1px solid #e2-e8f0;
+      background-color: white;
+      position: absolute;
+      top: 0;
+      left: 0;
+      transition: opacity 0.5s ease-in-out;
+      opacity: 0;
+    }
+    .slide.active { display: flex; opacity: 1; z-index: 10; }
+    #presentation-container {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      max-width: 1200px;
+      margin: 1rem auto;
+      border-radius: 0.5rem;
+      overflow: hidden;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1),
+                  0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      background-color: white;
+    }
+    .nav-button {
+      position: absolute;
+      bottom: 1.5rem;
+      z-index: 20;
+      padding: 0.75rem 1.5rem;
+      background-color: #2563eb;
+      color: white;
+      border: none;
+      border-radius: 9999px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+    .nav-button:hover { background-color: #1d4ed8; }
+    #prevBtn { left: 1.5rem; }
+    #nextBtn { right: 1.5rem; }
+    .slide-counter {
+      position: absolute;
+      bottom: 1.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 20;
+      font-size: 1rem;
+      color: #64748b;
+      background: rgba(255,255,255,0.9);
+      padding: 0.25rem 0.75rem;
+      border-radius: 999px;
+    }
+    /* Specific Styles for Maps and Plots */
+    .map-container {
+        width: 100%;
+        height: 75%;
+        border: 2px solid #e5e7eb;
+        border-radius: 0.5rem;
+        overflow: hidden;
+        margin-top: 1rem;
+        position: relative;
+    }
+    iframe { width: 100%; height: 100%; border: none; }
+    .plotly-graph-div { margin: auto; }
+    .plot-container { width: 100%; height: 75%; position: relative; }
+    th, td { vertical-align: middle; }
+  </style>
+</head>
+
+<body class="bg-gray-100 flex flex-col items-center justify-center min-h-screen p-4">
+
+  <div class="text-center mb-4">
+    <h1 class="text-2xl font-bold text-gray-800">B.Tech Project Presentation</h1>
+    <p class="text-gray-600">Click "Next" to navigate. Press 'F' for fullscreen.</p>
+  </div>
+
+  <div id="presentation-container">
+
+    <section class="slide active">
+      <div class="w-full text-left p-8">
+        <h1 class="text-6xl font-black text-blue-700 mb-4">Automated Solar PV Area Detection and Power Generation Forecasting</h1>
+        <p class="text-3xl text-gray-700">Using Satellite Image Processing & Deep Learning</p>
+        <div class="mt-24 border-t pt-4">
+          <p class="text-xl font-semibold text-gray-800">Ankit Choudhary & Apoorva Prashant Jain</p>
+          <p class="text-lg text-gray-600">Guides: Prof. Ankit Singhal, Prof. Tarun Mangla</p>
+        </div>
+      </div>
+    </section>
+
+        <section class="slide">
+      <div class="w-full text-left">
+        <h2 class="text-4xl font-bold text-gray-800 mb-8 border-b-4 border-blue-600 pb-2">Energy Estimation Methodology</h2>
+        <ul class="text-xl text-gray-700 space-y-4 list-disc list-outside ml-6">
+          <li><strong>Core Formula:</strong>
+            <br><span class="text-blue-700 font-semibold text-lg mt-1 block">P<sub>ac</sub>(t) = &alpha; &times; P<sub>dc0</sub> &times; (Itr(t) / 1000) &times; [1 + &gamma; &times; (T<sub>cell</sub>(t) &minus; 25&deg;C)]</span>
+          </li>
+          <li><strong>System Efficiency (&alpha;):</strong> Represents total efficiency from solar generation to AC output (DC-AC conversion, soiling, wiring). We determine &alpha; using regression analysis.</li>
+          <li><strong>Inputs:</strong> Panel area (A<sub>panel</sub>), efficiency (&eta;<sub>STC</sub>), and location coordinates.</li>
+          <li><strong>NASA Solar API:</strong> Provides hourly solar irradiance (Itr) and temperature data for any site.</li>
+          <li><strong>Validation:</strong> Compared predicted energy with actual site data from <strong class="text-blue-700">WIKA Palwal</strong>.</li>
+        </ul>
+      </div>
+    </section>
+
+
+
+    <section class="slide">
+        <div class="w-full text-left">
+            <h2 class="text-4xl font-bold text-gray-800 mb-8 border-b-4 border-blue-600 pb-2">Model L1: Constant Efficiency Assumption</h2>
+            <div class="grid grid-cols-2 gap-8 mt-6">
+                <div class="bg-gray-50 p-6 rounded-lg border">
+                    <h3 class="text-2xl font-semibold text-blue-700 mb-4">Assumptions</h3>
+                    <ul class="list-decimal list-outside ml-6 text-xl text-gray-700 space-y-4">
+                        <li><strong>Time-Invariant &alpha;:</strong> The system efficiency factor (&alpha;) is constant and does not vary with the time of day or season.</li>
+                        <li><strong>Uniform Environmental Losses:</strong> Factors like soiling (dust) and shading are assumed to be uniform and averaged into the constant &alpha;.</li>
+                    </ul>
+                </div>
+                <div class="bg-blue-50 p-6 rounded-lg border border-blue-200">
+                    <h3 class="text-2xl font-semibold text-blue-700 mb-4">Initial Regression Results</h3>
+                    <p class="text-gray-600 mb-4 italic">Optimized using Mean Absolute Error (MAE) minimization.</p>
+                    <table class="w-full text-lg text-left">
+                        <tr class="border-b border-blue-200"><td class="py-2 font-semibold">Optimized &alpha; (L1)</td><td class="py-2 text-right font-mono">0.732</td></tr>
+                        <tr class="border-b border-blue-200"><td class="py-2 font-semibold">Actual Mean (kWh)</td><td class="py-2 text-right font-mono">88.03</td></tr>
+                        <tr class="border-b border-blue-200"><td class="py-2 font-semibold">MAE (kWh)</td><td class="py-2 text-right font-mono">29.94</td></tr>
+                        <tr class="border-b border-blue-200"><td class="py-2 font-semibold">RMSE (kWh)</td><td class="py-2 text-right font-mono">44.51</td></tr>
+                        <tr><td class="py-2 font-bold text-blue-800">% Error (MAE/Mean)</td><td class="py-2 text-right font-bold text-red-600 font-mono">34.0%</td></tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Slide 14: L1 Hourly Time Series -->
+    <!-- Slide 14: L1 Hourly TS -->
+    <section class="slide">
+      <div class="w-full h-full text-left flex flex-col">
+        <h2 class="text-3xl font-bold text-gray-800 mb-4 border-b-4 border-blue-600 pb-2">
+          L1 Analysis: Hourly Time Series
+        </h2>
+        <p class="text-lg text-gray-600 mb-4">
+          High variance observed in hourly predictions vs actuals due to the constant &alpha; assumption.
+        </p>
+        <div class="plot-container">
+          <iframe
+            src="L1_Hourly_TimeSeries_Actual_vs_Pred.html"
+            class="w-full h-full border-0"
+          ></iframe>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- Slide 15: L1 Hourly Mean Error -->
+    <section class="slide">
+      <div class="w-full h-full text-left flex flex-col">
+        <h2 class="text-3xl font-bold text-gray-800 mb-4 border-b-4 border-blue-600 pb-2">
+          L1 Analysis: Hourly Mean Error
+        </h2>
+        <p class="text-lg text-gray-600 mb-4">
+          A systematic curved bias indicates that a constant &alpha; fails to capture morning/evening efficiency variations.
+        </p>
+        <div class="plot-container">
+          <iframe
+            src="L1_Hourly_Mean_Std_Error.html"
+            class="w-full h-full border-0"
+          ></iframe>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- Slide 16: L1 Daily Actual vs Pred -->
+    <section class="slide">
+      <div class="w-full h-full text-left flex flex-col">
+        <h2 class="text-3xl font-bold text-gray-800 mb-4 border-b-4 border-blue-600 pb-2">
+          L1 Analysis: Daily Aggregation
+        </h2>
+        <p class="text-lg text-gray-600 mb-4">
+          Daily aggregation smooths out some noise, but significant deviations remain visible.
+        </p>
+        <div class="plot-container">
+          <iframe
+            src="L1_Daily_Actual_vs_Pred.html"
+            class="w-full h-full border-0"
+          ></iframe>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- Slide 17: L1 Daily % Error -->
+    <section class="slide">
+      <div class="w-full h-full text-left flex flex-col">
+        <h2 class="text-3xl font-bold text-gray-800 mb-4 border-b-4 border-blue-600 pb-2">
+          L1 Analysis: Daily % Error
+        </h2>
+        <p class="text-lg text-gray-600 mb-4">
+          Percentage errors fluctuate significantly day-to-day, indicating model instability at this granularity.
+        </p>
+        <div class="plot-container">
+          <iframe
+            src="L1_Daily_Percentage_Error.html"
+            class="w-full h-full border-0"
+          ></iframe>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- Slide 18: L1 Weekly Actual vs Pred -->
+    <section class="slide">
+      <div class="w-full h-full text-left flex flex-col">
+        <h2 class="text-3xl font-bold text-gray-800 mb-4 border-b-4 border-blue-600 pb-2">
+          L1 Analysis: Weekly Aggregation
+        </h2>
+        <p class="text-lg text-gray-600 mb-4">
+          Weekly aggregation cancels out random noise, showing better alignment between actual and predicted values.
+        </p>
+        <div class="plot-container">
+          <iframe
+            src="L1_Weekly_Actual_vs_Pred.html"
+            class="w-full h-full border-0"
+          ></iframe>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- Slide 19: Insights from L1 Analysis -->
+    <section class="slide">
+      <div class="w-full text-left">
+        <h2 class="text-3xl font-bold text-gray-800 mb-6 border-b-4 border-blue-600 pb-2">
+          L1 Model: Key Insights
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-xl text-gray-700 mt-4">
+          <div class="bg-gray-50 p-6 rounded-lg border">
+            <h3 class="text-2xl font-semibold text-blue-700 mb-3">What Worked</h3>
+            <ul class="space-y-3 list-disc list-outside ml-6">
+              <li>L1 gives a <strong>reasonable first-order estimate</strong> of daily and weekly energy.</li>
+              <li>Weekly aggregation reduces random hour-to-hour noise and smooths cloud effects.</li>
+              <li>With a single optimized efficiency factor (&alpha;), the model is <strong>simple and fast</strong> to deploy.</li>
+            </ul>
+          </div>
+          <div class="bg-red-50 p-6 rounded-lg border border-red-200">
+            <h3 class="text-2xl font-semibold text-red-700 mb-3">Limitations</h3>
+            <ul class="space-y-3 list-disc list-outside ml-6">
+              <li><strong>Systematic bias</strong> across hours of the day &rarr; mornings and evenings are not well captured.</li>
+              <li>Single &alpha; cannot represent <strong>geometry (sun angle)</strong> and <strong>inverter loading</strong> behaviour.</li>
+              <li>Daily % errors fluctuate strongly, showing that <strong>constant efficiency is not robust</strong> at fine time scales.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-4 text-lg text-gray-800">
+          <p class="font-semibold text-blue-800 mb-1">Takeaway for L3:</p>
+          <p>
+            L1 validated the physical model and data pipeline, but also proved that
+            <strong>efficiency must be time-dependent</strong>. This directly motivated the
+            <strong>hourly efficiency correction approach in L3</strong>.
+          </p>
+        </div>
+      </div>
+    </section>
+
+
+<!-- Slide 20: L3 Intro & Hourly Mean Error -->
+<section class="slide">
+  <div class="w-full h-full text-left flex flex-col">
+    <h2 class="text-3xl font-bold text-gray-800 mb-2 border-b-4 border-blue-600 pb-2">
+      L3 Model: Hourly Efficiency Correction
+    </h2>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 h-full mt-2">
+      <div class="flex flex-col justify-center text-lg text-gray-700">
+        <h3 class="text-xl font-bold text-blue-700 mb-4">From Constant to Hourly &alpha;(h)</h3>
+        <p class="mb-3">
+          L1 analysis showed strong <strong>time-of-day dependence</strong> in the error curve:
+          mornings and evenings behaved very differently from mid-day.
+        </p>
+        <p class="mb-3">
+          <strong>L3 Methodology:</strong> we compute a separate efficiency factor
+          <strong>&alpha;(h)</strong> for each hour of the day, absorbing:
+        </p>
+        <ul class="list-disc list-outside ml-6 space-y-1 mb-3">
+          <li>Sun angle &rarr; geometric and incidence losses</li>
+          <li>Inverter part-load behaviour</li>
+          <li>Average soiling and wiring losses per hour band</li>
+        </ul>
+        <p class="font-semibold text-green-700">
+          Result: Hourly mean errors are now <strong>centered much closer to zero</strong>,
+          with reduced systematic bias.
+        </p>
+      </div>
+      <div class="relative h-full w-full">
+        <div class="plot-container">
+          <iframe
+            src="L3_Hourly_Mean_Std_Error.html"
+            class="w-full h-full border-0"
+          ></iframe>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- Slide 21: L3 Hourly Time Series -->
+<section class="slide">
+  <div class="w-full h-full text-left flex flex-col">
+    <h2 class="text-3xl font-bold text-gray-800 mb-4 border-b-4 border-blue-600 pb-2">
+      L3 Analysis: Hourly Time Series
+    </h2>
+    <p class="text-lg text-gray-600 mb-4">
+      With hourly &alpha;(h), the predicted curve follows the actual time series
+      more closely across the day, especially around shoulder hours.
+    </p>
+    <div class="plot-container">
+      <iframe
+        src="L3_Hourly_TimeSeries_Actual_vs_Pred.html"
+        class="w-full h-full border-0"
+      ></iframe>
+    </div>
+  </div>
+</section>
+
+
+<!-- Slide 22: L3 Daily Actual vs Pred -->
+<section class="slide">
+  <div class="w-full h-full text-left flex flex-col">
+    <h2 class="text-3xl font-bold text-gray-800 mb-4 border-b-4 border-blue-600 pb-2">
+      L3 Analysis: Daily Aggregation
+    </h2>
+    <p class="text-lg text-gray-600 mb-4">
+      At the daily level, L3 reduces both overestimation and underestimation streaks
+      compared to L1, leading to a more stable forecast.
+    </p>
+    <div class="plot-container">
+      <iframe
+        src="L3_Daily_Actual_vs_Pred.html"
+        class="w-full h-full border-0"
+      ></iframe>
+    </div>
+  </div>
+</section>
+
+<!-- Slide 23: L3 Daily % Error -->
+<section class="slide">
+  <div class="w-full h-full text-left flex flex-col">
+    <h2 class="text-3xl font-bold text-gray-800 mb-4 border-b-4 border-blue-600 pb-2">
+      L3 Analysis: Daily % Error
+    </h2>
+    <p class="text-lg text-gray-600 mb-4">
+      Daily percentage errors are better centered and show reduced variance, indicating
+      that hourly efficiency correction improves robustness to day-to-day variability.
+    </p>
+    <div class="plot-container">
+      <iframe
+        src="L3_Daily_Percentage_Error.html"
+        class="w-full h-full border-0"
+      ></iframe>
+    </div>
+  </div>
+</section>
+
+
+    <section class="slide">
+      <div class="w-full text-left">
+        <h2 class="text-4xl font-bold text-gray-800 mb-8 border-b-4 border-blue-600 pb-2">Conclusion & Future Scope</h2>
+        <div class="grid grid-cols-2 gap-8 text-xl text-gray-700">
+          <div>
+            <h3 class="text-2xl font-semibold text-blue-700 mb-4">Conclusions</h3>
+            <ul class="space-y-3 list-disc list-outside ml-6">
+                <li><strong>Constant Efficiency is insufficient:</strong> A single &alpha; leads to systematic biases (~34% error).</li>
+                <li><strong>Hourly Correction (L3):</strong> Calculating &alpha; by hour significantly improves accuracy.</li>
+                <li><strong>Spatial Averaging:</strong> Predicting for a cluster cancels out random noise effectively.</li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="text-2xl font-semibold text-blue-700 mb-4">Future Scope</h3>
+            <ul class="space-y-3 list-disc list-outside ml-6">
+              <li><strong>Weather Forecasting Integration:</strong> Incorporate live cloud cover and aerosol data to reduce dynamic errors.</li>
+              <li><strong>Shadow Modeling:</strong> Use 3D building data to calculate shadow losses.</li>
+              <li><strong>Deployment:</strong> Launch a real-time dashboard for grid operators.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <button id="prevBtn" class="nav-button">Previous</button>
+    <div id="slide-counter" class="slide-counter">1 / 24</div> 
+    <button id="nextBtn" class="nav-button">Next</button>
+  </div>
+
+  <script>
+    const slides = document.querySelectorAll('.slide');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const slideCounter = document.getElementById('slide-counter');
+    const container = document.getElementById('presentation-container');
+    let currentSlide = 0;
+
+    function showSlide(n) {
+      if (n < 0 || n >= slides.length) return; 
+
+      slides.forEach((s, i) => s.classList.remove('active'));
+      slides[n].classList.add('active');
+      slideCounter.textContent = `${n + 1} / ${slides.length}`;
+      prevBtn.style.display = n === 0 ? 'none' : 'block';
+      nextBtn.style.display = n === slides.length - 1 ? 'none' : 'block';
+      currentSlide = n;
+      
+      // Resize Plotly charts if they exist on the slide
+      if(typeof Plotly !== 'undefined') {
+          const plots = slides[n].querySelectorAll('.plotly-graph-div');
+          plots.forEach(plot => {
+              Plotly.relayout(plot, {autosize: true});
+          });
+      }
+    }
+    function nextSlide() { if (currentSlide < slides.length - 1) showSlide(currentSlide + 1); }
+    function prevSlide() { if (currentSlide > 0) showSlide(currentSlide - 1); }
+    function toggleFullScreen() {
+      if (!document.fullscreenElement) container.requestFullscreen();
+      else document.exitFullscreen();
+    }
+    nextBtn.onclick = nextSlide;
+    prevBtn.onclick = prevSlide;
+    document.addEventListener('keydown', e => {
+      if (e.key === 'ArrowRight') nextSlide();
+      else if (e.key === 'ArrowLeft') prevSlide();
+      else if (e.key.toLowerCase() === 'f') toggleFullScreen();
+    });
+    
+    window.addEventListener('resize', () => {
+       const plots = document.querySelectorAll('.plotly-graph-div');
+       plots.forEach(plot => Plotly.relayout(plot, {autosize: true}));
+    });
+
+    // ==========================================
+    // PLOTLY DATA INJECTION (From Final.html)
+    // ==========================================
+    
+    // Slide 16: L1 Hourly Time Series
+    if (document.getElementById("dac1cb86-a206-4018-9abc-952ed75f989e")) {
+        Plotly.newPlot("dac1cb86-a206-4018-9abc-952ed75f989e", [{"mode":"lines","name":"Actual","x":["2025-04-01T07:00:00","2025-04-01T08:00:00","2025-04-01T09:00:00","2025-04-01T10:00:00","2025-04-01T11:00:00","2025-04-01T12:00:00","2025-04-01T13:00:00","2025-04-01T14:00:00","2025-04-01T15:00:00","2025-04-01T16:00:00","2025-04-01T17:00:00","2025-04-01T18:00:00","2025-04-01T19:00:00","2025-04-02T07:00:00","2025-04-02T08:00:00","2025-04-02T09:00:00","2025-04-02T10:00:00","2025-04-02T11:00:00","2025-04-02T12:00:00","2025-04-02T13:00:00","2025-04-02T14:00:00","2025-04-02T15:00:00","2025-04-02T16:00:00","2025-04-02T17:00:00","2025-04-02T18:00:00","2025-04-02T19:00:00","2025-04-03T07:00:00","2025-04-03T08:00:00","2025-04-03T09:00:00","2025-04-03T10:00:00","2025-04-03T11:00:00","2025-04-03T12:00:00","2025-04-03T13:00:00","2025-04-03T14:00:00","2025-04-03T15:00:00","2025-04-03T16:00:00","2025-04-03T17:00:00","2025-04-03T18:00:00","2025-04-03T19:00:00"],"y":[8.6,56.86,92.94,89.56,228.27,250.18,253.43,243.34,200.2,108.76,105.21,39.9,4.17,8.67,38.62,118.49,175.32,215.56,234.59,244.82,232.02,200.97,155.39,96.37,37.97,4.11,8.46,27.81,115.36,171.31,207.49,232.09,119.29,178.49,197.67,156.51,89.92,21.65,1.94],"type":"scatter"},{"mode":"lines","name":"Predicted (L1)","x":["2025-04-01T07:00:00","2025-04-01T08:00:00","2025-04-01T09:00:00","2025-04-01T10:00:00","2025-04-01T11:00:00","2025-04-01T12:00:00","2025-04-01T13:00:00","2025-04-01T14:00:00","2025-04-01T15:00:00","2025-04-01T16:00:00","2025-04-01T17:00:00","2025-04-01T18:00:00","2025-04-01T19:00:00","2025-04-02T07:00:00","2025-04-02T08:00:00","2025-04-02T09:00:00","2025-04-02T10:00:00","2025-04-02T11:00:00","2025-04-02T12:00:00","2025-04-02T13:00:00","2025-04-02T14:00:00","2025-04-02T15:00:00","2025-04-02T16:00:00","2025-04-02T17:00:00","2025-04-02T18:00:00","2025-04-02T19:00:00","2025-04-03T07:00:00","2025-04-03T08:00:00","2025-04-03T09:00:00","2025-04-03T10:00:00","2025-04-03T11:00:00","2025-04-03T12:00:00","2025-04-03T13:00:00","2025-04-03T14:00:00","2025-04-03T15:00:00","2025-04-03T16:00:00","2025-04-03T17:00:00","2025-04-03T18:00:00","2025-04-03T19:00:00"],"y":[0.0,80.29698874175917,142.10260659795688,187.50767782248664,218.1062612945465,234.1775322838515,233.34126984074632,216.68221704857447,181.6160391231657,137.7242900011918,86.11833413968841,27.89227812709508,0.0,0.0,77.28401842156792,137.96237208620704,182.13332453836722,212.02676038377246,226.28825426134156,224.7163947381398,207.0673907961055,173.92267761611643,125.8046072083149,67.73746138200218,15.387813111776353,0.0,0.0,65.24107618214745,121.1374169999812,163.59773816803852,192.78349516687967,220.0359430913912,217.34997929111458,195.51785299627502,156.96028407515172,113.46879011823624,56.883766542926885,12.613241020272149,0.0],"type":"scatter"}], {"layout":{"title":{"text":"L1 Hourly: Actual vs Predicted (Sample)"},"xaxis":{"title":{"text":"Time"}},"yaxis":{"title":{"text":"Energy (kWh)"}},"autosize":true,"margin":{"l":40,"r":20,"t":40,"b":40}}});
+    }
+
+    // Slide 17: L1 Hourly Mean Error
+    if (document.getElementById("ce34c7ec-1d38-4bd6-a294-0ef1911cd735")) {
+        Plotly.newPlot("ce34c7ec-1d38-4bd6-a294-0ef1911cd735", [{"error_y":{"array":[0.5354509138655197,6.975371657011645,18.90416946791037,28.43514530737612,39.72930313624855,49.43516328942636,60.96883767832771,64.2211207100475,62.296696123799215,60.9559625584348,46.61784711922231,29.946698504681873,16.0359736034319,7.103850638784949,0.5948949487094337],"type":"data"},"mode":"markers+lines","name":"Mean ± Std (L1)","x":[6,7,8,9,10,11,12,13,14,15,16,17,18,19,20],"y":[1.791086956521739,2.36497322271927,-13.664528905420555,-11.529971504035926,-8.260258831425684,-10.09942864760429,-18.162630330402287,-25.73639868192488,-17.827066872719787,-9.987849600699487,1.411186862128368,6.778822301336368,12.114005360360775,9.605858585858586,1.445],"type":"scatter"}], {"layout":{"title":{"text":"L1 Hourly Mean Error"},"xaxis":{"title":{"text":"Hour of Day"}},"yaxis":{"title":{"text":"Error (kWh)"}},"autosize":true,"margin":{"l":40,"r":20,"t":40,"b":40}}});
+    }
+
+    // Slide 18: L1 Daily Actual vs Pred
+    if (document.getElementById("24b6429d-5add-4231-a38c-023210bf7938")) {
+        Plotly.newPlot("24b6429d-5add-4231-a38c-023210bf7938", [{"line":{"shape":"spline"},"mode":"lines","name":"Actual","x":["2025-04-01T00:00:00","2025-04-02T00:00:00","2025-04-03T00:00:00","2025-04-04T00:00:00","2025-04-05T00:00:00","2025-04-06T00:00:00","2025-04-07T00:00:00","2025-04-08T00:00:00"],"y":[1681.42,1762.9,1527.99,1577.01,1726.4,104.25,1412.08,929.86],"type":"scatter"},{"line":{"shape":"spline"},"mode":"lines","name":"Predicted (L1)","x":["2025-04-01T00:00:00","2025-04-02T00:00:00","2025-04-03T00:00:00","2025-04-04T00:00:00","2025-04-05T00:00:00","2025-04-06T00:00:00","2025-04-07T00:00:00","2025-04-08T00:00:00"],"y":[1691.619,1650.33,1515.58,1539.22,1657.25,212.88,1550.01,1501.72],"type":"scatter"}], {"layout":{"title":{"text":"Daily Actual vs Pred (L1)"},"xaxis":{"showticklabels":false},"yaxis":{"title":{"text":"kWh"}},"autosize":true,"margin":{"l":40,"r":10,"t":30,"b":20}}});
+    }
+
+    // Slide 19: L1 Daily % Error
+    if (document.getElementById("188967bd-371e-413a-affe-493e01319275")) {
+        Plotly.newPlot("188967bd-371e-413a-affe-493e01319275", [{"mode":"lines","name":"% Error (L1)","x":["2025-04-01T00:00:00","2025-04-02T00:00:00","2025-04-03T00:00:00","2025-04-04T00:00:00","2025-04-05T00:00:00","2025-04-06T00:00:00","2025-04-07T00:00:00","2025-04-08T00:00:00"],"y":[-0.606,6.385,0.811,2.396,4.005,-104.2,-9.76,-61.50],"type":"scatter"}], {"layout":{"title":{"text":"Daily % Error (L1)"},"xaxis":{"showticklabels":false},"yaxis":{"title":{"text":"%"}},"autosize":true,"margin":{"l":40,"r":10,"t":30,"b":20}}});
+    }
+
+    // Slide 20: L1 Weekly Actual vs Pred
+    if (document.getElementById("e14faf35-b36a-4849-b756-fbf301c52cbf")) {
+        Plotly.newPlot("e14faf35-b36a-4849-b756-fbf301c52cbf", [{"line":{"shape":"spline"},"mode":"lines","name":"Actual","x":["2025-04-06T00:00:00","2025-04-13T00:00:00","2025-04-20T00:00:00","2025-04-27T00:00:00","2025-05-04T00:00:00"],"y":[8379.97,7591.28,9909.78,9710.52,7904.97],"type":"scatter"},{"line":{"shape":"spline"},"mode":"lines","name":"Predicted (L1)","x":["2025-04-06T00:00:00","2025-04-13T00:00:00","2025-04-20T00:00:00","2025-04-27T00:00:00","2025-05-04T00:00:00"],"y":[8266.90,9995.76,10212.09,10824.48,8566.81],"type":"scatter"}], {"layout":{"title":{"text":"Weekly Actual vs Pred (L1)"},"xaxis":{"showticklabels":false},"yaxis":{"title":{"text":"kWh"}},"autosize":true,"margin":{"l":40,"r":10,"t":30,"b":20}}});
+    }
+
+    // Slide 21: L1 Weekly % Error
+    if (document.getElementById("b9f04857-0319-468c-8f17-fc875131f14f")) {
+        Plotly.newPlot("b9f04857-0319-468c-8f17-fc875131f14f", [{"mode":"lines","name":"% Error (L1)","x":["2025-04-06T00:00:00","2025-04-13T00:00:00","2025-04-20T00:00:00","2025-04-27T00:00:00","2025-05-04T00:00:00"],"y":[1.34,-31.67,-3.05,-11.47,-8.37],"type":"scatter"}], {"layout":{"title":{"text":"Weekly % Error (L1)"},"xaxis":{"showticklabels":false},"yaxis":{"title":{"text":"%"}},"autosize":true,"margin":{"l":40,"r":10,"t":30,"b":20}}});
+    }
+
+    // Slide 22: L3 Hourly Mean Error
+    if (document.getElementById("ce5270f3-36a4-4e22-8fed-9aa0adcc6542")) {
+        Plotly.newPlot("ce5270f3-36a4-4e22-8fed-9aa0adcc6542", [{"error_y":{"array":[0.53,7.27,17.86,27.96,39.57,49.45,61.00,64.14,62.33,61.06,46.84,29.61,16.04,7.10,0.59],"type":"data"},"mode":"markers+lines","name":"Mean ± Std (L3)","x":[6,7,8,9,10,11,12,13,14,15,16,17,18,19,20],"y":[1.79,1.08,-0.29,-0.90,-4.50,-10.60,-21.36,-29.45,-22.12,-12.75,-4.19,-4.50,-1.79,9.60,1.44],"type":"scatter"}], {"layout":{"title":{"text":"L3 Hourly Mean Error"},"xaxis":{"title":{"text":"Hour"}},"yaxis":{"title":{"text":"Error"}},"autosize":true,"margin":{"l":40,"r":10,"t":30,"b":20}}});
+    }
+
+    // Slide 23: L3 Weekly Actual vs Pred
+    if (document.getElementById("9050ae8e-b28d-4b9a-b474-ca73c10fffd6")) {
+        Plotly.newPlot("9050ae8e-b28d-4b9a-b474-ca73c10fffd6", [{"line":{"shape":"spline"},"mode":"lines","name":"Actual","x":["2025-04-06T00:00:00","2025-04-13T00:00:00","2025-04-20T00:00:00","2025-04-27T00:00:00","2025-05-04T00:00:00"],"y":[8379.97,7591.28,9909.78,9710.52,7904.97],"type":"scatter"},{"line":{"shape":"spline"},"mode":"lines","name":"Predicted (L3)","x":["2025-04-06T00:00:00","2025-04-13T00:00:00","2025-04-20T00:00:00","2025-04-27T00:00:00","2025-05-04T00:00:00"],"y":[8321.86,10091.79,10338.59,10952.23,8712.88],"type":"scatter"}], {"layout":{"title":{"text":"L3 Weekly Actual vs Predicted"},"xaxis":{"showticklabels":false},"yaxis":{"title":{"text":"kWh"}},"autosize":true,"margin":{"l":40,"r":10,"t":30,"b":20}}});
+    }
+
+    showSlide(currentSlide);
+  </script>
+</body>
+</html>
