@@ -15,7 +15,7 @@ from tqdm import tqdm
 from tqdm.asyncio import tqdm_asyncio 
 
 # --- CONFIGURATION ---
-API_KEY = "AIzaSyAAS5r2kygbpj26WxvzndrYxI2RnTansRk"  # <--- YOUR API KEY
+API_KEY = ""  # <--- YOUR API KEY
 # Changed to specific campus name for accurate geocoding
 CITY_NAME = "Indian Institute of Technology Delhi" 
 ZOOM = 19
@@ -255,4 +255,5 @@ async def main():
 if __name__ == "__main__":
     if sys.platform == 'win32':
         asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
+
     asyncio.run(main())
